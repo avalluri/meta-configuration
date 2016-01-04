@@ -16,8 +16,7 @@ This layer depends on:
   layers: meta
   branch: master
 
-  URI: git://git.yoctoproject.org/xxxx
-  layers: xxxx
+  URI: git@github.com:errordeveloper/oe-meta-go.git
   branch: master
 
 
@@ -54,6 +53,7 @@ other layers needed. e.g.:
     /path/to/yocto/meta \
     /path/to/yocto/meta-yocto \
     /path/to/yocto/meta-yocto-bsp \
+    /path/to/yocto/oe-meta-go \
     /path/to/yocto/meta-meta-iot-os-configuration \
     "
 
