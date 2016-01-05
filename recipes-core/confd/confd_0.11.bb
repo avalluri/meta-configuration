@@ -49,6 +49,8 @@ do_compile () {
   # supported amd64, 386, arm
   if [ "${TARGET_ARCH}" = "x86_64" ]; then
     export GOARCH="amd64"
+  elif [ "${TARGET_ARCH}" = "i586" ]; then
+    export GOARCH="386"
   fi
   cd ${S}/src/github.com/kelseyhightower/confd
   GOPATH=${S}/vendor:${S} go build -a -installsuffix cgo -ldflags "-s -extld ld -extldflags -static" .
