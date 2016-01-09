@@ -1,14 +1,3 @@
-# Recipe created by recipetool
-# This is the basis of a recipe and may need further editing in order to be fully functional.
-# (Feel free to remove these comments when editing.)
-#
-# WARNING: the following LICENSE and LIC_FILES_CHKSUM values are best guesses - it is
-# your responsibility to verify that the values are complete and correct.
-#
-# NOTE: multiple licenses have been detected; if that is correct you should separate
-# these in the LICENSE value using & if the multiple licenses all apply, or | if there
-# is a choice between the multiple licenses. If in doubt, check the accompanying
-# documentation to determine which situation is applicable.
 SUMMARY = "Distributed reliable key-value store for the most critical data of a distributed system"
 DESCRIPTION = "${SUMMARY}"
 HOMEPAGE = "https://coreos.com/etcd/docs/latest/"
@@ -27,6 +16,8 @@ do_configure () {
 }
 
 do_compile () {
+  export PATH=${STAGING_BINDIR_NATIVE}/${HOST_SYS}/:$PATH
+  export GOROOT=${STAGING_LIBDIR_NATIVE}/${HOST_SYS}/go
   export GOARCH="${TARGET_ARCH}"
   # supported amd64, 386, arm
   if [ "${TARGET_ARCH}" = "x86_64" ]; then
@@ -34,6 +25,7 @@ do_compile () {
   elif [ "${TARGET_ARCH}" = "i586" ]; then
     export GOARCH="386"
   fi
+
   /bin/sh ${S}/build
 }
 
