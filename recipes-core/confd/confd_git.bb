@@ -37,7 +37,7 @@ do_compile () {
   # supported amd64, 386, arm
   if [ "${TARGET_ARCH}" = "x86_64" ]; then
     export GOARCH="amd64"
-  elif [ "${TARGET_ARCH}" = "i586" ]; then
+  elif [ "${TARGET_ARCH}" = "i586" -o "${TARGET_ARCH}" = "i686" ]; then
     export GOARCH="386"
   fi
   export CGO_ENABLED="1"
