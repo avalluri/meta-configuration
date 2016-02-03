@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=f9f435c1bd3a753365e799edf375fc42"
 SRC_URI="gitsm://git@github.com/otcshare/iot-conf-fw.git;branch=master;protocol=ssh"
 SRC_URI[md5sum] = "0b1ea3843801d896a0009bb2eb66f432"
 SRC_URI[sha256sum] = "2f16242371c290fdec2cf88568f03391492afa6f0a81ac22d0d2625076ef6bf0"
-SRCREV="4d562b3ffbd007afce00e341d9679b908749dd3c"
+SRCREV="7ee8a8b5a31fad69589fcc6bd5628a2a0383f68e"
 
 DEPENDS = "go-cross"
 

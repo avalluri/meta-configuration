@@ -17,7 +17,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=a7c77d088bc8e2c497cf2cce6f20292f \
   "
 
 SRC_URI = " \
-  gitsm://git@github.com/otcshare/confd.git;branch=master;protocol=ssh;rev=9f83716f8f886cbf5e264da0c294d0c029d6d1e9;name=confd \
+  gitsm://git@github.com/otcshare/confd.git;branch=master;protocol=ssh;rev=ecc17f25012e0ccb5982c5d1de76be4afad6b05d;name=confd \
 "
 SRC_URI[md5sum] = "bbd92731d89af4f2ed20f90e1609b80c"
 SRC_URI[sha256sum] = "4fbfc1454f5822f1b9a4d99a5ac01cc0836082ec68c644dc42818a565317d21a"
