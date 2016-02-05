@@ -18,6 +18,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=a7c77d088bc8e2c497cf2cce6f20292f \
 
 SRC_URI = " \
   gitsm://git@github.com/otcshare/confd.git;branch=master;protocol=ssh;rev=ecc17f25012e0ccb5982c5d1de76be4afad6b05d;name=confd \
+  file://confd.service \
 "
 SRC_URI[md5sum] = "bbd92731d89af4f2ed20f90e1609b80c"
 SRC_URI[sha256sum] = "4fbfc1454f5822f1b9a4d99a5ac01cc0836082ec68c644dc42818a565317d21a"
@@ -28,6 +29,11 @@ RDEPENDS_${PN} = "etcd"
 S = "${WORKDIR}/git"
 
 INSANE_SKIP_${PN} += "already-stripped ldflags"
+
+inherit systemd
+
+SYSTEMD_PACKAGES = "${PN}"
+SYSTEMD_SERVICE_${PN} = "confd.service"
 
 do_compile () {
   export PATH=${STAGING_BINDIR_NATIVE}/${HOST_SYS}/:$PATH
@@ -51,5 +57,11 @@ do_compile () {
 do_install () {
   mkdir -p ${D}/${bindir}
   install -c ${S}/src/github.com/kelseyhightower/confd/confd ${D}/${bindir}/
+  install -d ${D}/${systemd_unitdir}/system
+  install -m 0644 ${WORKDIR}/confd.service ${D}/${systemd_unitdir}/system/
 }
 
+FILES_${PN} += " \
+  ${systemd_unitdir}/system/confd.service \
+  ${bindir}/confd \
+"
