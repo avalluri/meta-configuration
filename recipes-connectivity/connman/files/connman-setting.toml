@@ -1,0 +1,9 @@
+[template]
+src = "connman-setting.tmpl"
+dest = "/var/lib/connman/setting"
+keys = [
+     "/common/device/wifi",
+     "/host/device/wifi"
+]
+format = "ini"
+reload_cmd = "/bin/systemctl restart connman.service"
