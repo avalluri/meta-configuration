@@ -17,7 +17,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=a7c77d088bc8e2c497cf2cce6f20292f \
   "
 
 SRC_URI = " \
-  gitsm://git@github.com/otcshare/confd.git;branch=master;protocol=ssh;rev=ecc17f25012e0ccb5982c5d1de76be4afad6b05d;name=confd \
+  gitsm://git@github.com/otcshare/confd.git;branch=master;protocol=ssh;rev=afeee18f41545a557e2e6c4d272308b6e0ada497;name=confd \
   file://confd.service \
 "
 SRC_URI[md5sum] = "bbd92731d89af4f2ed20f90e1609b80c"
@@ -56,6 +56,9 @@ do_compile () {
 
 do_install () {
   mkdir -p ${D}/${bindir}
+  mkdir -p ${D}/${sysconfdir}/confd/conf.d
+  mkdir -p ${D}/${sysconfdir}/confd/templates
+  mkdir -p ${D}/${localstatedir}/cache/confs
   install -c ${S}/src/github.com/kelseyhightower/confd/confd ${D}/${bindir}/
   install -d ${D}/${systemd_unitdir}/system
   install -m 0644 ${WORKDIR}/confd.service ${D}/${systemd_unitdir}/system/
@@ -64,4 +67,6 @@ do_install () {
 FILES_${PN} += " \
   ${systemd_unitdir}/system/confd.service \
   ${bindir}/confd \
+  ${sysconfdir} \
+  ${localstatedir} \
 "
