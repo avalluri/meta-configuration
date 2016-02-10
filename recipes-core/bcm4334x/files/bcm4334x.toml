@@ -1,0 +1,10 @@
+[template]
+src = "bcm4334x.tmpl"
+dest = "/etc/modprobe.d/bcm4334x.conf"
+keys = [
+     "/common/device/wifi",
+     "/host/device/wifi"
+]
+format = "ini"
+reload_cmd = "/usr/libexec/bcm4334x/bcm4334x.sh"
+

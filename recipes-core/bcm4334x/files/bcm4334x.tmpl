@@ -1,0 +1,48 @@
+{{$wifi_common_defs := "/common/device/wifi"}}
+{{$wifi_host_specific_defs := "/host/device/wifi"}}
+
+{{$has_common_defs := exists $wifi_common_defs}}
+{{$has_host_specific_defs := exists $wifi_host_specific_defs}}
+
+{{define "ModprobeEdit"}}
+    {{$opmode := .}}
+    {{$modprobe := split (mustInclude "/etc/modprobe.d/bcm4334x.conf") "\n"}}
+
+    {{range $idx, $line := $modprobe}}
+        {{if regMatch $line "(options[ \t]+bcm4334x)"}}
+    	    {{if contains $line "op_mode="}}
+                {{regReplace $line "(op_mode=[0-9]+)" (printf "op_mode=%s" $opmode)}}
+	    {{else}}
+		{{print $line " op_mode=" $opmode}}
+	    {{end}}
+        {{else}}
+	    {{$line}}
+	{{end}}
+    {{end}}
+{{end}}
+
+{{define "SetMode"}}
+    {{$defs := json .}}
+    {{$mode := stringValue $defs.Mode}}
+
+    {{if or (eq $mode "AccessPoint") (eq $mode "Tether")}}
+    	 {{template "ModprobeEdit" "2"}}
+    {{else}}
+    	 {{template "ModprobeEdit" "0"}}
+    {{end}}
+{{end}}
+
+
+{{if $has_common_defs}}
+    {{if $has_host_specific_defs}}
+        {{template "SetMode" (join (split (print (getv $wifi_common_defs) (getv $wifi_host_specific_defs)) "}{") ", ")}}
+    {{else}}
+        {{template "SetMode" (getv $wifi_common_defs)}}
+    {{end}}
+{{else}}
+    {{if $has_host_specific_defs}}
+        {{template "SetMode" (getv $wifi_host_specific_defs)}}
+    {{else}}
+        {{mustInclude "/etc/modprobe.d/bcm4334x.conf"}}
+    {{end}}
+{{end}}
