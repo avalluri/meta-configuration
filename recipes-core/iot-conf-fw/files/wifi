@@ -1,0 +1,1 @@
+{"Mode":"EndPoint","Name":"homenet","IPv4":{"IPAddress":"10.0.0.1","SubnetMask":"255.255.255.0","Gateway":"10.0.0.254"},"Security":{"Mode":"WPA2-private","PreSharedKey":"helloworldhereiam"},"SSIDAdvertisement":true}
