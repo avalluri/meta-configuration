@@ -56,6 +56,7 @@
 	    [service_wifi_{{$name}}]
 	    Type=wifi
 	    Name={{$name}}
+            AutoConnect=true
     	    {{range $field, $value := $defs}}
                 {{if eq $field "IPv4"}}
             	    {{template "IPV4" $value}}

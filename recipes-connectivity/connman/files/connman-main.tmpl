@@ -19,9 +19,6 @@
     {{$settings := regReplace (include "/etc/connman/main.conf") "(\n\\[)" "\n\f["}}
 
     {{if contains $settings "[General]"}}
-    	#
-	# General section edited by confd
-	#
     	{{$pattern := "(\\[General\\][^[]*)(.*)"}}
         {{$general := split (regReplace $settings $pattern "$1") "\n"}}
 	{{$rest := regReplace $settings $pattern "$2"}}
@@ -42,9 +39,6 @@
 	{{/* output the rest of the config file */}}
 	{{$rest}}
     {{else}}
-	#
-	# General section created by confd
-	#
 	{{print "[General]\n"}}
 	{{template "AppendDefs" $defs}}
 	{{print "\f"}}
@@ -74,5 +68,7 @@
 {{else}}
     {{if $has_host_specific_defs}}
         {{template "General" (getv $wifi_host_specific_defs)}}
+    {{else}}
+        {{include "/etc/connman/main.conf"}}
     {{end}}
 {{end}}

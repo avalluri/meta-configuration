@@ -1,6 +1,6 @@
 [template]
 src = "connman-wifi.tmpl"
-dest = "/var/lib/connman/wifi.conf"
+dest = "/var/lib/connman/wifi.config"
 keys = [
      "/common/device/wifi",
      "/host/device/wifi"
