@@ -29,14 +29,6 @@ do_install() {
   install ${WORKDIR}/restart.sh ${D}/${libexecdir}/connman/
   install ${WORKDIR}/wifi.config ${D}/${localstatedir}/lib/connman
   install -d ${D}/${sysconfdir}/connman
-
-  #
-  # temporary hack to get rid of some security caused issues in tethering
-  #
-  #grep -v ProtectSystem=full ${D}/lib/systemd/system/connman.service | \
-  #     grep -v ProtectHome=true | \
-  #     grep -v CapabilityBoundingSe > ${WORKDIR}/connman.service
-  #cp ${WORKDIR}/connman.service ${D}/lib/systemd/system/connman.service
 }
 
 FILES_${PN} = " \
