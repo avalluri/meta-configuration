@@ -49,6 +49,7 @@ do_install () {
   mkdir -p ${D}/var/cache/confs/common/device
   mkdir -p ${D}/var/cache/confs/common/devel
   cp ${WORKDIR}/etcdconfs.service ${D}/${systemd_unitdir}/system/
+  mkdir -p ${D}/var/cache/confs/common/device
   cp ${WORKDIR}/wifi ${D}/var/cache/confs/common/device/wifi
   cp ${WORKDIR}/ssh ${D}/var/cache/confs/common/devel/ssh
 }
