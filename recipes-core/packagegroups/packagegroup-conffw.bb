@@ -8,7 +8,9 @@ PACKAGEGROUP_DISABLE_COMPLEMENTARY = "1"
 
 def check_if_enabled(comp, trueval, d):
   import oe.packagedata
-  if oe.packagedata.pkgmap(d).get(comp) is None:
+  pkgmap = oe.packagedata.pkgmap(d)
+
+  if pkgmap is not None and pkgmap.get(comp) is None:
     return ""
   bb.debug(1, "Enabling configuration package for '%s'" % trueval)
   return trueval
