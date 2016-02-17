@@ -10,7 +10,7 @@ def check_if_enabled(comp, trueval, d):
   import oe.packagedata
   if oe.packagedata.pkgmap(d).get(comp) is None:
     return ""
-  print "Enabling configuration package ", trueval
+  bb.debug(1, "Enabling configuration package for '%s'" % trueval)
   return trueval
 
 RDEPENDS_${PN} = " \
