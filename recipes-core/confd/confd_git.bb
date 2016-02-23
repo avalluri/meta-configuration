@@ -46,7 +46,7 @@ do_compile () {
   elif [ "${TARGET_ARCH}" = "i586" -o "${TARGET_ARCH}" = "i686" ]; then
     export GOARCH="386"
   fi
-  export CGO_ENABLED="1"
+  export CGO_ENABLED="0"
   export CGO_CCFLAGS="${BUILDSDK_CFLAGS}"
   export CGO_LDFLAGS="${BUILDSDK_LDFLAGS}"
 

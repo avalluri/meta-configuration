@@ -31,6 +31,7 @@ do_compile () {
   export PATH=${STAGING_BINDIR_NATIVE}/${HOST_SYS}/:$PATH
   export GOROOT=${STAGING_LIBDIR_NATIVE}/${HOST_SYS}/go
   export GOARCH="${TARGET_ARCH}"
+  export CGO_ENABLED="0"
   # supported amd64, 386, arm
   if [ "${TARGET_ARCH}" = "x86_64" ]; then
     export GOARCH="amd64"
