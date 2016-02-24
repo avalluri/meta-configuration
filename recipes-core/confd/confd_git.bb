@@ -24,7 +24,7 @@ SRC_URI[md5sum] = "bbd92731d89af4f2ed20f90e1609b80c"
 SRC_URI[sha256sum] = "4fbfc1454f5822f1b9a4d99a5ac01cc0836082ec68c644dc42818a565317d21a"
 
 DEPENDS = "go-cross"
-RDEPENDS_${PN} = "iot-conf-fw"
+RRECOMMENDS_${PN} = "iot-conf-fw"
 
 S = "${WORKDIR}/git"
 
