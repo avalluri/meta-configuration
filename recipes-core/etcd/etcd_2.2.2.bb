@@ -13,28 +13,17 @@ DEPENDS = "go-cross"
 
 INSANE_SKIP_${PN} += "already-stripped"
 
-PACKAGES += "${PN}-server ${PN}-client"
+PACKAGES = "${PN}-server ${PN}-client"
 
-do_configure () {
-}
+inherit go-env
 
 do_compile () {
-  export PATH=${STAGING_BINDIR_NATIVE}/${HOST_SYS}/:$PATH
-  export GOROOT=${STAGING_LIBDIR_NATIVE}/${HOST_SYS}/go
-  export GOARCH="${TARGET_ARCH}"
-  # supported amd64, 386, arm
-  if [ "${TARGET_ARCH}" = "x86_64" ]; then
-    export GOARCH="amd64"
-  elif [ "${TARGET_ARCH}" = "i586" -o "${TARGET_ARCH}" = "i686" ]; then
-    export GOARCH="386"
-  fi
-
   /bin/sh ${S}/build
 }
 
 do_install () {
-  mkdir -p ${D}/${bindir}
-  cp ${S}/bin/etcd* ${D}/${bindir}
+  mkdir -p ${D}/usr/bin
+  cp ${S}/bin/etcd* ${D}/usr/bin/
 }
 
 FILES_${PN}-server = "${bindir}/etcd"
