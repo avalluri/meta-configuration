@@ -18,28 +18,13 @@ DEPENDS = "go-cross"
 
 INSANE_SKIP_${PN} += "already-stripped ldflags"
 
-inherit systemd
+inherit systemd go-env
 
 SYSTEMD_SERVICE_${PN} = "etcdconfs.service"
 
 S = "${WORKDIR}/git"
 
-do_configure () {
-}
-
 do_compile () {
-  export PATH=${STAGING_BINDIR_NATIVE}/${HOST_SYS}/:$PATH
-  export GOROOT=${STAGING_LIBDIR_NATIVE}/${HOST_SYS}/go
-  export GOARCH="${TARGET_ARCH}"
-  export CGO_ENABLED="0"
-  # supported amd64, 386, arm
-  if [ "${TARGET_ARCH}" = "x86_64" ]; then
-    export GOARCH="amd64"
-  elif [ "${TARGET_ARCH}" = "i586" -o "${TARGET_ARCH}" = "i686" ]; then
-    export GOARCH="386"
-  fi
-
-  export GO_LDFLAGS="${LDFLAGS}"
   /bin/bash ${S}/build.sh
 }
 
