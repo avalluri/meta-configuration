@@ -8,19 +8,23 @@ inherit conffw
 SRC_URI = " file://bcm4334x.toml \
             file://bcm4334x.tmpl \
             file://bcm4334x.sh \
+            file://bcm4334x.conf \
 "
 
 do_install() {
-    mkdir -p ${D}/${sysconfdir}/confd/conf.d
-    mkdir -p ${D}/${sysconfdir}/confd/templates
+    mkdir -p ${D}/usr/share/factory/etc/confd/conf.d
+    mkdir -p ${D}/usr/share/factory/etc/confd/templates
+    mkdir -p ${D}/usr/lib/tmpfiles.d
     mkdir -p ${D}/${libexecdir}/bcm4334x
-    install ${WORKDIR}/*.toml ${D}/${sysconfdir}/confd/conf.d/
-    install ${WORKDIR}/*.tmpl ${D}/${sysconfdir}/confd/templates/
+    install ${WORKDIR}/*.toml ${D}/usr/share/factory/etc/confd/conf.d/
+    install ${WORKDIR}/*.tmpl ${D}/usr/share/factory/etc/confd/templates/
+    install ${WORKDIR}/bcm4334x.conf ${D}/usr/lib/tmpfiles.d/
     install -m 0755 ${WORKDIR}/bcm4334x.sh ${D}/${libexecdir}/bcm4334x/
 }
 
-FILES_${PN}= " ${sysconfdir}/confd/conf.d/bcm4334x.toml \
-               ${sysconfdir}/confd/templates/bcm4334x.tmpl \
+FILES_${PN}= " /usr/share/factory/etc/confd/conf.d/bcm4334x.toml \
+               /usr/share/factory/etc/confd/templates/bcm4334x.tmpl \
+               /usr/lib/tmpfiles.d/bcm4334x.conf \
                ${libexecdir}/bcm4334x/bcm4334x.sh \
 "
 

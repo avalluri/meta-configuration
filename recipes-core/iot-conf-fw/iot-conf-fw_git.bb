@@ -6,6 +6,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=f9f435c1bd3a753365e799edf375fc42"
 
 SRC_URI=" \
   gitsm://git@github.com/otcshare/iot-conf-fw.git;branch=master;protocol=ssh \
+  file://iot-conf-fw.conf \
   file://etcdconfs.service \
   file://wifi \
   file://ssh \
@@ -31,17 +32,20 @@ do_compile () {
 do_install () {
   mkdir -p ${D}/${bindir}
   cp ${S}/bin/* ${D}/${bindir}
-  mkdir -p ${D}/${systemd_unitdir}/system/
-  mkdir -p ${D}/var/cache/confs/common/device
-  mkdir -p ${D}/var/cache/confs/common/devel
+  mkdir -p ${D}/${systemd_unitdir}/system
+  mkdir -p ${D}/usr/lib/tmpfiles.d
+  mkdir -p ${D}/usr/share/factory/confs/device
+  mkdir -p ${D}/usr/share/factory/confs/devel
+  cp ${WORKDIR}/iot-conf-fw.conf ${D}/usr/lib/tmpfiles.d
   cp ${WORKDIR}/etcdconfs.service ${D}/${systemd_unitdir}/system/
-  cp ${WORKDIR}/wifi ${D}/var/cache/confs/common/device/wifi
-  cp ${WORKDIR}/ssh ${D}/var/cache/confs/common/devel/ssh
+  cp ${WORKDIR}/wifi ${D}/usr/share/factory/confs/device/wifi
+  cp ${WORKDIR}/ssh ${D}/usr/share/factory/confs/devel/ssh
 }
 
 FILES_${PN} += " \
   ${bindir}/* \
   ${systemd_unitdir}/system/etcdconfs.service \
-  /var/cache/confs/common/device/wifi \
-  /var/cache/confs/common/devel/ssh \
-  "
+  /usr/lib/tmpfiles.d/iot-conf-fw.conf \
+  /usr/share/factory/confs/device/wifi \
+  /usr/share/factory/confs/devel/ssh \
+"
