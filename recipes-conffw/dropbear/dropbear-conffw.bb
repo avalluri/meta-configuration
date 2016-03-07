@@ -7,18 +7,22 @@ inherit conffw
 
 SRC_URI= " file://dropbear-systemd.toml \
            file://dropbear-systemd.tmpl \
+           file://dropbear.conf \
 "
 
 do_install() {
-  mkdir -p ${D}/${sysconfdir}/confd/conf.d
-  mkdir -p ${D}/${sysconfdir}/confd/templates
-  install ${WORKDIR}/dropbear-systemd.toml ${D}/${sysconfdir}/confd/conf.d/
-  install ${WORKDIR}/dropbear-systemd.tmpl ${D}/${sysconfdir}/confd/templates/
+  mkdir -p ${D}/usr/share/factory/etc/confd/conf.d
+  mkdir -p ${D}/usr/share/factory/etc/confd/templates
+  mkdir -p ${D}/usr/lib/tmpfiles.d
+  install ${WORKDIR}/dropbear-systemd.toml ${D}/usr/share/factory/etc/confd/conf.d/
+  install ${WORKDIR}/dropbear-systemd.tmpl ${D}/usr/share/factory/etc/confd/templates/
+  install ${WORKDIR}/dropbear.conf  ${D}/usr/lib/tmpfiles.d/
 }
 
 FILES_${PN} = " \
-  ${sysconfdir}/confd/conf.d/dropbear-systemd.toml \
-  ${sysconfdir}/confd/templates/dropbear-systemd.tmpl \
+  /usr/share/factory/etc/confd/conf.d/dropbear-systemd.toml \
+  /usr/share/factory/etc/confd/templates/dropbear-systemd.tmpl \
+  /usr/lib/tmpfiles.d/dropbear.conf \
 "
 
-RRECOMMENDS_${PN} += " dropbear"
+RDEPENDS_${PN} += " dropbear"

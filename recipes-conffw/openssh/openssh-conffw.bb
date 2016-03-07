@@ -7,25 +7,27 @@ SRC_URI= " file://openssh-socket.toml \
            file://openssh-socket.tmpl \
            file://openssh-fw.toml \
            file://openssh-fw.tmpl \
+           file://openssh.conf \
 "
 
 inherit conffw
 
 do_install() {
-  mkdir -p ${D}/${sysconfdir}/confd/conf.d
-  mkdir -p ${D}/${sysconfdir}/confd/templates
-  mkdir -p ${D}/${sysconfdir}/systemd/system/sshd.socket.d
-  install ${WORKDIR}/openssh-socket.toml ${D}/${sysconfdir}/confd/conf.d/
-  install ${WORKDIR}/openssh-socket.tmpl ${D}/${sysconfdir}/confd/templates/
-  install ${WORKDIR}/openssh-fw.toml ${D}/${sysconfdir}/confd/conf.d/
-  install ${WORKDIR}/openssh-fw.tmpl ${D}/${sysconfdir}/confd/templates/
+  mkdir -p ${D}/usr/share/factory/etc/confd/conf.d
+  mkdir -p ${D}/usr/share/factory/etc/confd/templates
+  mkdir -p ${D}/usr/lib/tmpfiles.d
+  install ${WORKDIR}/openssh-socket.toml ${D}/usr/share/factory/etc/confd/conf.d/
+  install ${WORKDIR}/openssh-socket.tmpl ${D}/usr/share/factory/etc/confd/templates/
+  install ${WORKDIR}/openssh-fw.toml ${D}/usr/share/factory/etc/confd/conf.d/
+  install ${WORKDIR}/openssh-fw.tmpl ${D}/usr/share/factory/etc/confd/templates/
+  install ${WORKDIR}/openssh.conf ${D}/usr/lib/tmpfiles.d/
 }
 
-FILES_${PN} = "${sysconfdir}/confd/conf.d/openssh-socket.toml \
-               ${sysconfdir}/confd/templates/openssh-socket.tmpl \
-               ${sysconfdir}/confd/conf.d/openssh-fw.toml \
-               ${sysconfdir}/confd/templates/openssh-fw.tmpl \
-               ${sysconfdir}/systemd/system/sshd.socket.d \
+FILES_${PN} = "/usr/share/factory/etc/confd/conf.d/openssh-socket.toml \
+               /usr/share/factory/etc/confd/templates/openssh-socket.tmpl \
+               /usr/share/factory/etc/confd/conf.d/openssh-fw.toml \
+               /usr/share/factory/etc/confd/templates/openssh-fw.tmpl \
+               /usr/lib/tmpfiles.d/openssh.conf \
 "
 
 RDEPENDS_${PN} += " openssh"
