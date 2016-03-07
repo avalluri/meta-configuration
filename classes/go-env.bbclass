@@ -4,7 +4,7 @@ arch_to_goarch() {
 
   case $1 in
     "x86_64") goarch="amd64";;
-    "i386"|"i486"|"i566"|"i686") goarch="386";;
+    "i386"|"i486"|"i586"|"i686") goarch="386";;
   esac
 
   echo "$goarch"
