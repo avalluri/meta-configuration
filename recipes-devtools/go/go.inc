@@ -7,6 +7,7 @@ BOOTSTRAP_PV="1.4"
 SRC_URI = " \
   http://golang.org/dl/go${PV}.src.tar.gz \
   http://golang.org/dl/go${BOOTSTRAP_PV}.src.tar.gz;name=bootstrap;subdir=go-${BOOTSTRAP_PV} \
+  file://0001-build.go-Pass-CGO_CFLAGS-for-building-.c-files.patch \
   "
 SRC_URI[md5sum] = "e67833ea37fbc002fbe38efe6c1bcd98"
 SRC_URI[sha256sum] = "a96cce8ce43a9bf9b2a4c7d470bc7ee0cb00410da815980681c8353218dcf146"
