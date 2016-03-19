@@ -6,6 +6,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=f9f435c1bd3a753365e799edf375fc42"
 
 SRC_URI=" \
   gitsm://git@github.com/otcshare/iot-conf-fw.git;branch=master;protocol=ssh \
+  file://0001-gccgo-syscalls-for-386.patch \
   file://iot-conf-fw.conf \
   file://etcdconfs.service \
   file://wifi \
@@ -25,8 +26,36 @@ SYSTEMD_SERVICE_${PN} = "etcdconfs.service"
 
 S = "${WORKDIR}/git"
 
+drop_go_1_5_specifics() {
+  #
+  # Temp fix: as gccgo not yet support go>=1.5
+  # http.Request.Cancel needs atleast go-1.5
+  # so commenting that to build with gccgo
+  sed -i 's/req.Cancel/\/\/req.Cancel/g' "${S}/src/github.com/coreos/etcd/client/cancelreq.go"
+}
+
+apply_sys_unix_patch() {
+  cd ${S}/src/golang.org/x/sys
+  git apply "${WORKDIR}/0001-gccgo-syscalls-for-386.patch"
+  cd -
+}
+
+do_patch_append() {
+    bb.build.exec_func('drop_go_1_5_specifics', d)
+    bb.build.exec_func('apply_sys_unix_patch', d)
+}
+
 do_compile () {
-  /bin/bash ${S}/build.sh
+  #/bin/bash ${S}/build.sh
+  if [ ! -d ${S}/bin ]; then
+    mkdir ${S}/bin
+  fi
+  export CGO_CFLAGS="-I${STAGING_DIR_TARGET}/usr/include"
+  export CGO_LDFLAGS="-L${STAGING_DIR_TARGET}/usr/lib"
+  export GOPATH="$PWD"
+
+   go build -x -o ${S}/bin/etcdconfs -compiler gccgo -gccgoflags "${GCCGO_BASE_FLAGS}" etcdconfs.go
+   go build -x -o ${S}/bin/connmanupd -compiler gccgo -gccgoflags "${GCCGO_BASE_FLAGS}" connmanupd.go
 }
 
 do_install () {
