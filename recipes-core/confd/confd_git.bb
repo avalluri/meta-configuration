@@ -2,18 +2,18 @@ SUMMARY = "Manage local application configuration files using templates and data
 DESCRIPTION = "${SUMMARY}"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=a7c77d088bc8e2c497cf2cce6f20292f \
-  file://vendor/github.com/aws/aws-sdk-go/LICENSE.txt;md5=3b83ef96387f14655fc854ddc3c6bd57 \
-  file://vendor/github.com/hashicorp/consul/LICENSE;md5=b278a92d2c1509760384428817710378 \
-  file://vendor/github.com/hashicorp/consul/website/LICENSE.md;md5=5a968180730cf0d03d0c694c42a49282 \
-  file://vendor/github.com/coreos/etcd/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57 \
-  file://vendor/github.com/samuel/go-zookeeper/LICENSE;md5=0d3bff996e9a8f99d8ba45af7c9f6da7 \
-  file://vendor/github.com/kelseyhightower/memkv/LICENSE;md5=d042577b541a770683995fb630f60cfe \
-  file://vendor/github.com/Sirupsen/logrus/LICENSE;md5=8dadfef729c08ec4e631c4f6fc5d43a0 \
-  file://vendor/github.com/go-ini/ini/LICENSE;md5=19cbd64715b51267a47bf3750cc6a8a5 \
-  file://vendor/github.com/BurntSushi/toml/COPYING;md5=389a9e29629d1f05e115f8f05c283df5 \
-  file://vendor/github.com/BurntSushi/toml/cmd/tomlv/COPYING;md5=389a9e29629d1f05e115f8f05c283df5 \
-  file://vendor/github.com/BurntSushi/toml/cmd/toml-test-encoder/COPYING;md5=389a9e29629d1f05e115f8f05c283df5 \
-  file://vendor/github.com/BurntSushi/toml/cmd/toml-test-decoder/COPYING;md5=389a9e29629d1f05e115f8f05c283df5 \
+  file://vendor/src/github.com/aws/aws-sdk-go/LICENSE.txt;md5=3b83ef96387f14655fc854ddc3c6bd57 \
+  file://vendor/src/github.com/hashicorp/consul/LICENSE;md5=b278a92d2c1509760384428817710378 \
+  file://vendor/src/github.com/hashicorp/consul/website/LICENSE.md;md5=5a968180730cf0d03d0c694c42a49282 \
+  file://vendor/src/github.com/coreos/etcd/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57 \
+  file://vendor/src/github.com/samuel/go-zookeeper/LICENSE;md5=0d3bff996e9a8f99d8ba45af7c9f6da7 \
+  file://vendor/src/github.com/kelseyhightower/memkv/LICENSE;md5=d042577b541a770683995fb630f60cfe \
+  file://vendor/src/github.com/Sirupsen/logrus/LICENSE;md5=8dadfef729c08ec4e631c4f6fc5d43a0 \
+  file://vendor/src/github.com/go-ini/ini/LICENSE;md5=19cbd64715b51267a47bf3750cc6a8a5 \
+  file://vendor/src/github.com/BurntSushi/toml/COPYING;md5=389a9e29629d1f05e115f8f05c283df5 \
+  file://vendor/src/github.com/BurntSushi/toml/cmd/tomlv/COPYING;md5=389a9e29629d1f05e115f8f05c283df5 \
+  file://vendor/src/github.com/BurntSushi/toml/cmd/toml-test-encoder/COPYING;md5=389a9e29629d1f05e115f8f05c283df5 \
+  file://vendor/src/github.com/BurntSushi/toml/cmd/toml-test-decoder/COPYING;md5=389a9e29629d1f05e115f8f05c283df5 \
   "
 
 #NOTE: building master branch, better use release branch/tag
@@ -36,7 +36,7 @@ SRC_URI = " \
 SRC_URI[md5sum.confd] = "bbd92731d89af4f2ed20f90e1609b80c"
 SRC_URI[sha256sum.confd] = "4fbfc1454f5822f1b9a4d99a5ac01cc0836082ec68c644dc42818a565317d21a"
 
-DEPENDS = "go-cross"
+DEPENDS = "go-cross libffi"
 RRECOMMENDS_${PN} = "iot-conf-fw"
 
 S = "${WORKDIR}/src/github.com/kelseyhightower/confd"
@@ -48,11 +48,37 @@ inherit systemd go-env
 SYSTEMD_PACKAGES = "${PN}"
 SYSTEMD_SERVICE_${PN} = "confd.service"
 
+drop_go_1_5_specifics() {
+  #
+  # Temp fix: as gccgo not yet support go>=1.5
+  # http.Request.Cancel needs atleast go-1.5
+  # so commenting that to build with gccgo
+  sed -i 's/req.Cancel/\/\/req.Cancel/g' "${S}/vendor/github.com/coreos/etcd/client/cancelreq.go"
+}
+
+move_vendor_source() {
+  if [ ! -d ${S}/vendor/src ]; then
+    mkdir ${S}/vendor_src
+    mv ${S}/vendor/* ${S}/vendor_src
+    mv ${S}/vendor_src ${S}/vendor/src
+  fi
+}
+
+do_patch_append() {
+    bb.build.exec_func('drop_go_1_5_specifics', d)
+    #bb.build.exec_func('move_vendor_source', d)
+}
+
+do_configure() {
+  move_vendor_source
+}
+
 do_compile () {
-  export GOPATH=${WORKDIR}
+  export GOPATH="${WORKDIR}:${S}/vendor"
   cd ${S}
   mkdir -p ${S}/bin
-  go build -v -o ${S}/bin/confd .
+ 
+  go build -x -o ${S}/bin/confd -compiler gccgo -gccgoflags "${GCCGO_BASE_FLAGS} -B${STAGING_DIR_TARGET}${libdir}"
 }
 
 do_install () {
