@@ -1,0 +1,30 @@
+From 9b56b2de25030130a865c807ed842aedcaa66f32 Mon Sep 17 00:00:00 2001
+From: Amarnath Valluri <amarnath.valluri@intel.com>
+Date: Fri, 26 May 2017 16:33:36 +0300
+Subject: [PATCH 1/2] Fix segmentation fault
+
+Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
+---
+ luci2/src/rpcd/luci2.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/rpcd/luci2.c b/rpcd/luci2.c
+index c8ef9bf..ceba9bd 100644
+--- a/rpcd/luci2.c
++++ b/rpcd/luci2.c
+@@ -1235,9 +1235,9 @@ static FILE *
+ dnsmasq_leasefile(void)
+ {
+ 	FILE *leases = NULL;
+-	struct uci_package *p;
+-	struct uci_element *e;
+-	struct uci_section *s;
++	struct uci_package *p = NULL;
++	struct uci_element *e = NULL;
++	struct uci_section *s = NULL;
+ 	struct uci_ptr ptr = {
+ 		.package = "dhcp",
+ 		.section = NULL,
+-- 
+2.7.4
+

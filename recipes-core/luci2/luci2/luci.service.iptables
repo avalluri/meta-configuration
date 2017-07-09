@@ -1,0 +1,12 @@
+[Unit]
+Description="OpenWrt web user interface"
+Requires=ubus.service,rpcd.service
+After=rpcd.service
+
+[Service]
+ExecStartPre=/usr/sbin/iptables -A INPUT -p tcp -m multiport --dports 80,443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+ExecStart=/usr/sbin/uhttpd -f -h /www -u /ubus -p 80 -a
+ExecStopPost=/usr/sbin/iptables -D INPUT -p tcp -m multiport --dports 80,443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+
+[Install]
+WantedBy=multi-user.target

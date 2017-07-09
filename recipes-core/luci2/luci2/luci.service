@@ -1,0 +1,10 @@
+[Unit]
+Description="OpenWrt web user interface"
+Requires=ubus.service,rpcd.service
+After=rpcd.service
+
+[Service]
+ExecStart=/usr/sbin/uhttpd -f -h /www -u /ubus -p 80 -a
+
+[Install]
+WantedBy=multi-user.target

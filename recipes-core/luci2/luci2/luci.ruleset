@@ -1,0 +1,10 @@
+#!/usr/sbin/nft
+
+table inet filter {
+    include "zones.ruleset"
+    chain luci {
+        iif @ZONE_LAN accept;
+    }
+}
+
+add element inet filter tcp_service_map { 80: jump luci }
