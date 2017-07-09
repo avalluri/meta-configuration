@@ -1,0 +1,12 @@
+{
+    "apps": {
+        "title": "Applications",
+        "index":40
+    },
+    "apps/testapp": {
+        "title": "My Awsome App",
+        "view": "apps/testapp",
+        "acls": [ "testapp" ],
+        "index": 10
+    }
+}

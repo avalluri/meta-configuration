@@ -1,0 +1,18 @@
+{
+    "testapp": {
+        "description": "Testapp configuration ACL",
+        "read": {
+            "uci":
+            [
+                "testapp"
+            ]
+        },
+        "write": {
+            "uci":
+            [
+                "testapp"
+            ]
+        }
+    }
+}
+
