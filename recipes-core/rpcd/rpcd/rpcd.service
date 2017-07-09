@@ -1,0 +1,13 @@
+[Unit]
+Description="OpenWrt UBUS RPC server"
+Requires=ubusd.service
+After=ubusd.service
+BindsTo=ubusd.service
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/rpcd
+Restart=always
+
+[Install]
+RequiredBy=rpcd.service

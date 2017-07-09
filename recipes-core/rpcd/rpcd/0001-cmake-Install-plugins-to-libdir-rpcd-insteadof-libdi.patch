@@ -1,0 +1,24 @@
+From 880f482b3dba7c7d7036648932644b8b293e1b86 Mon Sep 17 00:00:00 2001
+From: Amarnath Valluri <amarnath.valluri@intel.com>
+Date: Wed, 5 Jul 2017 14:56:25 +0300
+Subject: [PATCH] cmake: Install plugins to ${libdir}/rpcd insteadof ${libdir}
+
+Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ceb472e..c98ebf3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -62,5 +62,5 @@ ENDIF()
+ 
+ INSTALL(TARGETS rpcd ${PLUGINS}
+ 	RUNTIME DESTINATION sbin
+-	LIBRARY DESTINATION lib
++	LIBRARY DESTINATION lib/rpcd
+ )
+-- 
+2.7.4
+
