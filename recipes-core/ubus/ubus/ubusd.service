@@ -1,0 +1,10 @@
+[Unit]
+Description="OpenWrt system message/RPC bus"
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/ubusd
+Restart=always
+
+[Install]
+RequiredBy=rpcd.service
