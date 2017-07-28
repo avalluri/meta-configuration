@@ -19,7 +19,7 @@ S = "${LUCI2}/src"
 inherit cmake systemd
 
 DEPENDS = "libubox ubus rpcd"
-RDEPENDS_${PN} = "rpcd uhttpd2"
+RDEPENDS_${PN} = "rpcd uhttpd"
 RDEPENDS_${PN}_append_df-refkit-firewall += " nftables"
 
 CFLAGS_append = " -Wno-unused-result"

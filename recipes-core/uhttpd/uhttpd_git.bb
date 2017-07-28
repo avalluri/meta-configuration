@@ -3,13 +3,13 @@ HOMEPAGE = "http://wiki.openwrt.org/doc/howto/http.uhttpd"
 LICENSE = "ISC"
 LIC_FILES_CHKSUM = "file://main.c;beginline=1;endline=18;md5=ba30601dd30339f7ff3d0ad681d45679"
 
-SRC_URI = "git://nbd.name/uhttpd2.git;protocol=git;branch=master"
+SRC_URI = "git://git.openwrt.org/project/uhttpd.git;protocol=git;branch=master"
 SRC_URI += "file://ubus.default"
 SRC_URI += "file://uhttpd.config"
 SRC_URI += "file://uhttpd.init"
 SRC_URI += "file://fix-bsd.patch"
 
-SRCREV = "b9178b9357798ae23a5724333cc6572d14f23958"
+SRCREV = "88c0b4b6d00152c54a0f1367ae839c71547281e1"
 S = "${WORKDIR}/git"
 
 inherit cmake
