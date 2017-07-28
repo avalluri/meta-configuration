@@ -27,8 +27,8 @@ Signed-off-by: Theodore A. Roth <theodore_roth@trimble.com>
 
 diff --git a/io/main.c b/io/main.c
 index 68aaece..8622837 100644
---- a/io/main.c
-+++ b/io/main.c
+--- a/luci2/src/io/main.c
++++ b/luci2/src/io/main.c
 @@ -141,7 +141,7 @@ md5sum(const char *file)
  		close(fds[0]);
  		close(fds[1]);

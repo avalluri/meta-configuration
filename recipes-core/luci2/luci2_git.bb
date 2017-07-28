@@ -1,7 +1,7 @@
 DESCRIPTION = "Basic utility library"
 HOMEPAGE = "http://wiki.openwrt.org/doc/uci"
 LICENSE = "Apache-2.0"
-LIC_FILES_CHKSUM = "file://../Makefile;beginline=1;endline=5;md5=3ce05a39dbd458b46a410c5a9f266107"
+LIC_FILES_CHKSUM = "file://${LUCI2}/Makefile;beginline=1;endline=5;md5=3ce05a39dbd458b46a410c5a9f266107"
 
 SRC_URI = "\
     git://git.openwrt.org/project/luci2/ui.git;protocol=git;branch=master \
@@ -10,11 +10,13 @@ SRC_URI = "\
     file://0002-Fix-rpcd-plugins-install-location.patch \
     ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'file://luci.service', '', d)} \
 "
+#
 SRC_URI_append_df-refkit-config = "file://luci.ruleset"
 SRCREV = "e452ca693af5278ff2ddc69b6f8ed0f346c98fb1"
 
-LUCI2 = "${WORKDIR}/git/luci2/"
-S = "${LUCI2}/src"
+S = "${WORKDIR}/git"
+LUCI2 = "${S}/luci2/"
+OECMAKE_SOURCEPATH = "${LUCI2}/src"
 
 inherit cmake systemd
 
