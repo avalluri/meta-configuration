@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://uloop.c;beginline=1;endline=17;md5=f151c0422668fa4c8f
 SECTION = "base"
 DEPENDS += "json-c"
 
-SRCREV = "7f671b1e68a6664b5baf3e3cffc1bb0880984267"
+SRCREV = "fd57eea9f37e447814afbf934db626288aac23c4"
 SRC_URI = "git://git.openwrt.org/project/libubox.git \
           "
 S = "${WORKDIR}/git"
