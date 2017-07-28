@@ -8,6 +8,8 @@ SRC_URI = "\
     file://100-luci2-fix-compiler-warning.patch \
     file://0001-Fix-segmentation-fault.patch \
     file://0002-Fix-rpcd-plugins-install-location.patch \
+    file://0003-Destroy-dialog-when-changes-are-applied.patch \
+    file://0004-Implement-Save-Apply.patch \
     ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'file://luci.service', '', d)} \
 "
 #

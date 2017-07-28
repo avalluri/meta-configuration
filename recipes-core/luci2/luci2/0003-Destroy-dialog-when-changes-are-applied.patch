@@ -1,0 +1,38 @@
+From 93e8053f45c47a36a59342aecf207792fe5ba688 Mon Sep 17 00:00:00 2001
+From: Amarnath Valluri <amarnath.valluri@intel.com>
+Date: Fri, 28 Jul 2017 16:17:53 +0300
+Subject: [PATCH 3/4] Destroy dialog when changes are applied
+
+After pending changes get applied hide the changes dialog and reset pending
+changes in view.
+
+Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
+---
+ luci2/htdocs/luci2/ui.js | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/luci2/htdocs/luci2/ui.js b/luci2/htdocs/luci2/ui.js
+index af2bf32..a877848 100644
+--- a/luci2/htdocs/luci2/ui.js
++++ b/luci2/htdocs/luci2/ui.js
+@@ -686,8 +686,15 @@
+ 								style: 'confirm',
+ 								confirm: function() {
+ 									L.uci.apply().then(
+-										function(code) { alert('Success with code ' + code); },
+-										function(code) { alert('Error with code ' + code); }
++										function(code) {
++											L.ui.updateChanges();
++											L.ui.dialog('false');
++											alert('Success with code ' + code);
++										},
++										function(code) {
++											L.ui.dialog('false');
++											alert('Error with code ' + code);
++										}
+ 									);
+ 								}
+ 							});
+-- 
+2.7.4
+
