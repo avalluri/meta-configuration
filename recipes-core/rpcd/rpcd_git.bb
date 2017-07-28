@@ -16,7 +16,7 @@ SRC_URI = "git://git.openwrt.org/project/rpcd.git \
            file://rpcd.service \
            "
 
-inherit cmake pkgconfig
+inherit cmake pkgconfig systemd
 
 S = "${WORKDIR}/git"
 
@@ -28,13 +28,20 @@ PACKAGECONFIG[rpc-sys]  = "-DRPCSYS_SUPPORT=ON, -DRPCSYS_SUPPORT=OFF"
 PACKAGECONFIG[file] = "-DFILE_SUPPORT=ON, -DFILE_SUPPORT=OFF"
 
 do_install_append() {
-    install -d ${D}${includedir}/rpcd
+    mkdir -p ${D}${includedir}/rpcd
     install -m 0644 ${S}/include/rpcd/* ${D}${includedir}/rpcd/
-    install -Dm 0755 ${WORKDIR}/rpcd.config ${D}${sysconfdir}/config/rpcd
-    install -Dm 0755 ${WORKDIR}/rpcd.init ${D}${sysconfdir}/init.d/rpcd
 
-    mkdir -p ${D}${sysconfdir}/rc.d
-    ln -s ../init.d/rpcd ${D}${sysconfdir}/rc.d/S12rpcd
+    install -d ${D}${sysconfdir}/config
+    install -Dm 0755 ${WORKDIR}/rpcd.config ${D}${sysconfdir}/config/rpcd
+
+    if ${@bb.utils.contains('DISTRO_FEATURES','sysvinit','true','false',d)};
+    then
+        mkdir -p ${D}${sysconfdir}/init.d
+        install -Dm 0755 ${WORKDIR}/rpcd.init ${D}${sysconfdir}/init.d/rpcd
+
+        mkdir -p ${D}${sysconfdir}/rc.d
+        lnr ${D}${sysconfdir}/init.d/rpcd ${D}${sysconfdir}/rc.d/S12rpcd
+    fi
 
     if [ "${base_sbindir}" != "${sbindir}" ]; then
         mkdir -p ${D}/${base_sbindir}
@@ -49,5 +56,5 @@ do_install_append() {
 }
 
 FILES_SOLIBSDEV = ""
-FILES_${PN} += "${libdir}/* ${base_sbindir} ${sbindir}"
+FILES_${PN} += "${includedir} ${libdir}/* ${base_sbindir} ${sbindir} ${sysconfdir}"
 FILES_${PN} += "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${systemd_system_unitdir}', '', d)}"
