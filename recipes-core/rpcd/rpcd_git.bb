@@ -11,12 +11,17 @@ DEPENDS = "json-c libubox ubus uci"
 SRCREV = "0577cfc1acdbaf30c31090e75045ba58d6dd8a78"
 SRC_URI = "git://git.openwrt.org/project/rpcd.git \
            file://0001-cmake-Install-plugins-to-libdir-rpcd-insteadof-libdi.patch \
+           file://0002-session-Handle-disabled-accounts-properly.patch \
            file://rpcd.config \
            file://rpcd.init \
            file://rpcd.service \
            "
 
-inherit cmake pkgconfig systemd
+inherit cmake pkgconfig systemd useradd
+
+USERADD_PACKAGES = "${PN}"
+GROUPADD_PARAM_${PN} = "-r admin"
+USERADD_PARAM_${PN} = "-r --no-create-home -G admin -P admin admin"
 
 S = "${WORKDIR}/git"
 
