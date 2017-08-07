@@ -17,11 +17,24 @@ SRC_URI = "git://git.openwrt.org/project/rpcd.git \
            file://rpcd.service \
            "
 
-inherit cmake pkgconfig systemd useradd
 
 USERADD_PACKAGES = "${PN}"
-GROUPADD_PARAM_${PN} = "-r admin"
-USERADD_PARAM_${PN} = "-r --no-create-home -G admin -P admin admin"
+GROUPADD_PARAM_${PN} = "-r ${RPCD_USER}"
+USERADD_PARAM_${PN} = "-r -M -g ${RPCD_USER_GROUP} -P ${RPCD_PASSWD} ${RPCD_USER}"
+
+RPCD_USER ??= "admin"
+RPCD_PASSWD ??= "${RPCD_USER}"
+RPCD_USER_GROUP ??= "${RPCD_USER}"
+update_rpcd_user() {
+    sed -i 's/[^:]*/${RPCD_USER}/1' ${CONFFW_LAYERDIR}/conf/rpcd-passwd
+    sed -i 's/[^:]*/${RPCD_USER_GROUP}/1' ${CONFFW_LAYERDIR}/conf/rpcd-group
+}
+
+python __anonymous() {
+    bb.build.exec_func("update_rpcd_user", d)
+}
+
+inherit cmake pkgconfig systemd useradd
 
 S = "${WORKDIR}/git"
 
@@ -31,6 +44,10 @@ PACKAGECONFIG ??= "rpc-sys file"
 PACKAGECONFIG[iwinfo] = "-DIWINFO_SUPPORT=ON, -DIWINFO_SUPPORT=OFF, iwinfo"
 PACKAGECONFIG[rpc-sys]  = "-DRPCSYS_SUPPORT=ON, -DRPCSYS_SUPPORT=OFF"
 PACKAGECONFIG[file] = "-DFILE_SUPPORT=ON, -DFILE_SUPPORT=OFF"
+
+do_configure_append() {
+    sed -ie 's/admin/${RPCD_USER}/g' ${WORKDIR}/rpcd.config
+}
 
 do_install_append() {
     mkdir -p ${D}${includedir}/rpcd
