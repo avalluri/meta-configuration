@@ -34,4 +34,4 @@ do_install_append() {
 }
 
 FILES_SOLIBSDEV = ""
-FILES_${PN} += "${base_libdir}/config/uci.sh ${base_libdir}/*.so"
+FILES_${PN} += "${base_libdir}/config/uci.sh ${libdir}/*.so"
