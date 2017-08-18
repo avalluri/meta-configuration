@@ -2,7 +2,7 @@ SUMMARY = "Essential UCI configuration framework packages"
 
 inherit packagegroup
 
-CONFFW_ADAPTERS ?= "connman-uci"
+CONFFW_ADAPTERS ?= "connman-uci openssh-uci"
 
 RDEPENDS_packagegroup-conffw = "\
     ubus \
