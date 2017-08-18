@@ -23,14 +23,12 @@ PACKAGECONFIG[lua] = "-DLUA_SUPPORT=ON, -DLUA_SUPPORT=OFF, lua5.1,luajit"
 PACKAGECONFIG[tls] = "-DTLS_SUPPORT=ON, -DTLS_SUPPORT=OFF, ustream-ssl"
 PACKAGECONFIG[ubus] = "-DUBUS_SUPPORT=ON, -DUBUS_SUPPORT=OFF, ubus"
 
-
 #FIXME: put plugins to the correct place
 FILES_${PN} += "${libdir}/*.so"
 
 do_install_append () {
-    mkdir -p ${D}/${sysconfdir}/config ${D}/${sysconfdir}/init.d ${D}${libdir} ${D}${sysconfdir}/uci-defaults
-    install ${WORKDIR}/uhttpd.config ${D}/${sysconfdir}/config/uhttpd
-    install ${WORKDIR}/uhttpd.init ${D}/${sysconfdir}/init.d/uhttpd
+    mkdir -p ${D}${sysconfdir}/config ${D}${libdir} ${D}${sysconfdir}/uci-defaults
+    install ${WORKDIR}/uhttpd.config ${D}${sysconfdir}/config/uhttpd
     install ${WORKDIR}/ubus.default ${D}${sysconfdir}/uci-defaults/00_uhttpd_ubus
     mv ${D}${bindir} ${D}${sbindir}
     if [ "${@bb.utils.contains('PACKAGECONFIG', 'lua', '1', '0', d)}" == "1" ]; then
@@ -40,7 +38,10 @@ do_install_append () {
         install ${B}/uhttpd_ubus.so ${D}${libdir}
     fi
 
-    mkdir -p ${D}/etc/rc.d
-    ln -s ../init.d/uhttpd ${D}/etc/rc.d/S50uhttpd
+    if [ "${@bb.utils.contains('DISTRO_FEATURES' , 'sysvinit', '1', '0', d)}" == "1" ]; then
+        mkdir -p ${D}/etc/rc.d ${D}/${sysconfdir}/init.d
+        install ${WORKDIR}/uhttpd.init ${D}${sysconfdir}/init.d/uhttpd
+        lnr ${D}${sysconfdir}/init.d/uhttpd ${D}${sysconfdir}/rc.d/S50uhttpd
+    fi
 }
 
