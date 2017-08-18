@@ -72,11 +72,11 @@ do_install_append() {
 
     if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)};
     then
-        install -dm 0755 ${D}/${systemd_system_unitdir}
-        install -m 0644 ${WORKDIR}/rpcd.service ${D}/${systemd_system_unitdir}
+        install -dm 0755 ${D}/${systemd_user_unitdir}
+        install -m 0644 ${WORKDIR}/rpcd.service ${D}/${systemd_user_unitdir}
     fi
 }
 
 FILES_SOLIBSDEV = ""
 FILES_${PN} += "${includedir} ${libdir}/* ${base_sbindir} ${sbindir} ${sysconfdir}"
-FILES_${PN} += "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${systemd_system_unitdir}', '', d)}"
+FILES_${PN} += "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${systemd_user_unitdir}', '', d)}"

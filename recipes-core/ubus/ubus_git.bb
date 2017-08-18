@@ -28,14 +28,14 @@ do_install_append () {
     fi
     if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)};
     then
-        install -dm 0755 ${D}/${systemd_system_unitdir}
-        install ${WORKDIR}/ubusd.service ${D}/${systemd_system_unitdir}
+        install -dm 0755 ${D}/${systemd_user_unitdir}
+        install ${WORKDIR}/ubusd.service ${D}/${systemd_user_unitdir}
     fi
 }
 
 FILES_SOLIBSDEV = ""
 FILES_${PN} += "${base_sbindir}/* ${sbindir}/* ${libdir}/*.so \
-                ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${systemd_system_unitdir}', '', d)} \
+                ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${systemd_user_unitdir}', '', d)} \
                 "
 FILES_${PN}-tools = "${bindir}/ubus"
 

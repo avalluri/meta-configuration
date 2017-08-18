@@ -37,8 +37,8 @@ do_install_append() {
     install -Dm 0644 ${LUCI2}/share/menu.d/system.json ${D}${datadir}/rpcd/menu.d/system.json
     install -Dm 0644 ${LUCI2}/share/menu.d/network.json ${D}${datadir}/rpcd/menu.d/network.json
     if [ -n "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '1', '', d)}" ]; then
-        install -dm 0755 ${D}/${systemd_system_unitdir}
-        install -Dm 0664 ${WORKDIR}/luci.service ${D}/${systemd_system_unitdir}/
+        install -dm 0755 ${D}/${systemd_user_unitdir}
+        install -Dm 0664 ${WORKDIR}/luci.service ${D}/${systemd_user_unitdir}/
     fi
 }
 
@@ -49,4 +49,4 @@ do_install_append_df-refkit-firewall() {
 
 FILES_${PN}_append_df-refkit-firewall += "${libdir}/firewall/services/luci.ruleset"
 FILES_${PN} += "${datadir}/rpcd ${libdir}/rpcd /www"
-FILES_${PN} += "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${systemd_system_unitdir}', '', d)}"
+FILES_${PN} += "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '${systemd_user_unitdir}', '', d)}"
