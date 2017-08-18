@@ -1,0 +1,82 @@
+From e880783b42ce6f9e98f6224f8505623bea2541c5 Mon Sep 17 00:00:00 2001
+From: Amarnath Valluri <amarnath.valluri@intel.com>
+Date: Tue, 8 Aug 2017 16:38:07 +0300
+Subject: [PATCH 5/6] Support for read/write 'openssh' autherized keys.
+
+Introduced a compile flag SSH_SERVER for selecting ssh server which defaults to
+'dropbear'.
+
+Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
+---
+ luci2/src/rpcd/CMakeLists.txt |  6 ++++++
+ luci2/src/rpcd/luci2.c        | 22 ++++++++++++++++++++--
+ 2 files changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/luci2/src/rpcd/CMakeLists.txt b/luci2/src/rpcd/CMakeLists.txt
+index 8b763f4..ea91777 100644
+--- a/luci2/src/rpcd/CMakeLists.txt
++++ b/luci2/src/rpcd/CMakeLists.txt
+@@ -5,6 +5,12 @@ PROJECT(luci2-plugin C)
+ ADD_DEFINITIONS(-Os -Wall -Werror --std=gnu99 -g3 -Wmissing-declarations -Iinclude)
+ 
+ SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
++SET(SSH_SERVER "dropbear" CACHE STRING "ssh server used")
++IF(SSH_SERVER STREQUAL "dropbear")
++  ADD_DEFINITIONS( -DSSH_SERVER_DROPBEAR)
++ELSEIF(SSH_SERVER STREQUAL "openssh")
++  ADD_DEFINITIONS( -DSSH_SERVER_OPENSSH)
++ENDIF()
+ 
+ IF(APPLE)
+   INCLUDE_DIRECTORIES(/opt/local/include)
+diff --git a/luci2/src/rpcd/luci2.c b/luci2/src/rpcd/luci2.c
+index ceba9bd..5990f23 100644
+--- a/luci2/src/rpcd/luci2.c
++++ b/luci2/src/rpcd/luci2.c
+@@ -674,8 +674,17 @@ rpc_luci2_sshkeys_get(struct ubus_context *ctx, struct ubus_object *obj,
+ 	FILE *f;
+ 	void *c;
+ 	char *p, line[4096];
++	char *ssh_keys_file = NULL;
+ 
+-	if (!(f = fopen("/etc/dropbear/authorized_keys", "r")))
++#ifdef SSH_SERVER_OPENSSH
++	asprintf(&ssh_keys_file, "%s/.ssh/authorized_keys", getenv("HOME"));
++#else //if SSH_SERVER_DROPBEAR
++	asprintf(&ssh_keys_file, "%s", "/etc/dropbear/authorized_keys");
++#endif
++
++	f = fopen(ssh_keys_file, "r");
++	free(ssh_keys_file);
++	if (!f)
+ 		return rpc_errno_status();
+ 
+ 	blob_buf_init(&buf, 0);
+@@ -708,6 +717,7 @@ rpc_luci2_sshkeys_set(struct ubus_context *ctx, struct ubus_object *obj,
+ 	FILE *f;
+ 	int rem;
+ 	struct blob_attr *cur, *tb[__RPC_K_MAX];
++	char *ssh_keys_file = NULL;
+ 
+ 	blobmsg_parse(rpc_sshkey_policy, __RPC_K_MAX, tb,
+ 	              blob_data(msg), blob_len(msg));
+@@ -715,7 +725,15 @@ rpc_luci2_sshkeys_set(struct ubus_context *ctx, struct ubus_object *obj,
+ 	if (!tb[RPC_K_KEYS])
+ 		return UBUS_STATUS_INVALID_ARGUMENT;
+ 
+-	if (!(f = fopen("/etc/dropbear/authorized_keys", "w")))
++#ifdef SSH_SERVER_OPENSSH
++	asprintf(&ssh_keys_file, "%s/.ssh/authorized_keys", getenv("HOME"));
++#else //if SSH_SERVER_DROPBEAR
++	asprintf(&ssh_keys_file, "%s", "/etc/dropbear/authorized_keys");
++#endif
++
++	f = fopen(ssh_keys_file, "w");
++	free(ssh_keys_file);
++	if (!f)
+ 		return rpc_errno_status();
+ 
+ 	blobmsg_for_each_attr(cur, tb[RPC_K_KEYS], rem)
+-- 
+2.7.4
+

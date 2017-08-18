@@ -1,7 +1,6 @@
 [Unit]
 Description="OpenWrt web user interface"
-Requires=ubus.service,rpcd.service
-After=rpcd.service
+Requires=rpcd.service
 
 [Service]
 ExecStart=/usr/sbin/uhttpd -f -h /www -u /ubus -p 80 -a

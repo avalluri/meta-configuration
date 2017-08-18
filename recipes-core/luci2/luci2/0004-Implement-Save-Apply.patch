@@ -1,7 +1,7 @@
-From 34249537a4a6151396205ca0076681260a0e36cc Mon Sep 17 00:00:00 2001
+From 0936e4bac2b32b035f739f5e546fd06b4b5ce12b Mon Sep 17 00:00:00 2001
 From: Amarnath Valluri <amarnath.valluri@intel.com>
 Date: Fri, 28 Jul 2017 16:19:28 +0300
-Subject: [PATCH 4/4] Implement Save & Apply
+Subject: [PATCH 4/6] Implement Save & Apply
 
 Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
 ---
@@ -9,7 +9,7 @@ Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
  1 file changed, 30 insertions(+), 1 deletion(-)
 
 diff --git a/luci2/htdocs/luci2/cbi.js b/luci2/htdocs/luci2/cbi.js
-index cdffb91..8b556cc 100644
+index cdffb91..b67cc47 100644
 --- a/luci2/htdocs/luci2/cbi.js
 +++ b/luci2/htdocs/luci2/cbi.js
 @@ -2967,7 +2967,9 @@
@@ -39,10 +39,10 @@ index cdffb91..8b556cc 100644
 +			return this.save().then(function() {
 +				return L.uci.save();
 +			}).then(function() {
-+				return L.uci.apply.then(function(code) {
-+					L.ui.alert('Success with code ' + code);
++				return L.uci.apply().then(function(code) {
++					alert('Success with code ' + code);
 +				}, function(code) {
-+					L.ui.alert('Error with code ' + code);
++					alert('Error with code ' + code);
 +				});
 +			}).then(function() {
 +				self.load();

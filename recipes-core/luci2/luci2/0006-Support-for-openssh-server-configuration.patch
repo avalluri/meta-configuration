@@ -1,0 +1,83 @@
+From d133427514d06b5089f65e2d1b6e63ac08b95b7e Mon Sep 17 00:00:00 2001
+From: Amarnath Valluri <amarnath.valluri@intel.com>
+Date: Mon, 14 Aug 2017 14:17:34 +0300
+Subject: [PATCH 6/6] Support for openssh server configuration.
+
+Renamed ssh server uic configuration from 'dropbear.@dropbear[i]' to
+'sshd.@server[i]', this allows to support generic ssh servers.
+
+Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
+---
+ luci2/htdocs/luci2/view/system.admin.js | 13 +++++++------
+ luci2/share/acl.d/luci2.json            |  4 ++--
+ 2 files changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/luci2/htdocs/luci2/view/system.admin.js b/luci2/htdocs/luci2/view/system.admin.js
+index 8ecc95f..5b5dca3 100644
+--- a/luci2/htdocs/luci2/view/system.admin.js
++++ b/luci2/htdocs/luci2/view/system.admin.js
+@@ -272,9 +272,9 @@ L.ui.view.extend({
+ 	execute: function() {
+ 		var self = this;
+ 		return self.getSSHKeys().then(function(keys) {
+-			var m = new L.cbi.Map('dropbear', {
++			var m = new L.cbi.Map('sshd', {
+ 				caption:     L.tr('SSH Access'),
+-				description: L.tr('Dropbear offers SSH network shell access and an integrated SCP server'),
++				description: L.tr('SSH server offers SSH network shell access and an integrated SCP server'),
+ 				tabbed:      true
+ 			});
+ 
+@@ -321,9 +321,9 @@ L.ui.view.extend({
+ 			});
+ 
+ 
+-			var s3 = m.section(L.cbi.TypedSection, 'dropbear', {
++			var s3 = m.section(L.cbi.TypedSection, 'server', {
+ 				caption:     L.tr('SSH Server'),
+-				description: L.tr('This sections define listening instances of the builtin Dropbear SSH server'),
++				description: L.tr('This sections define listening instances of the builtin SSH server'),
+ 				addremove:   true,
+ 				add_caption: L.tr('Add instance ...'),
+ 				readonly:    !self.options.acls.admin,
+@@ -332,12 +332,13 @@ L.ui.view.extend({
+ 
+ 			s3.option(L.cbi.NetworkList, 'Interface', {
+ 				caption:     L.tr('Interface'),
+-				description: L.tr('Listen only on the given interface or, if unspecified, on all')
++				description: L.tr('Listen only on the given interface or, if unspecified, on all'),
++				optional:    true
+ 			});
+ 
+ 			s3.option(L.cbi.InputValue, 'Port', {
+ 				caption:     L.tr('Port'),
+-				description: L.tr('Specifies the listening port of this Dropbear instance'),
++				description: L.tr('Specifies the listening port of this instance'),
+ 				datatype:    'port',
+ 				placeholder: 22,
+ 				optional:    true
+diff --git a/luci2/share/acl.d/luci2.json b/luci2/share/acl.d/luci2.json
+index 30ef91c..0c01e51 100644
+--- a/luci2/share/acl.d/luci2.json
++++ b/luci2/share/acl.d/luci2.json
+@@ -107,7 +107,7 @@
+ 				]
+ 			},
+ 			"uci": [
+-				"dropbear"
++				"sshd"
+ 			]
+ 		},
+ 		"write": {
+@@ -118,7 +118,7 @@
+ 				]
+ 			},
+ 			"uci": [
+-				"dropbear"
++				"sshd"
+ 			]
+ 		}
+ 	},
+-- 
+2.7.4
+

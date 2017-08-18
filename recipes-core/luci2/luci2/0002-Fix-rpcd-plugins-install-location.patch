@@ -1,7 +1,7 @@
 From 72ae3128b3d515e776729e6cd714b8af34280901 Mon Sep 17 00:00:00 2001
 From: Amarnath Valluri <amarnath.valluri@intel.com>
 Date: Fri, 7 Jul 2017 12:18:15 +0300
-Subject: [PATCH 2/4] Fix rpcd plugins install location
+Subject: [PATCH 2/6] Fix rpcd plugins install location
 
 Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
 ---
