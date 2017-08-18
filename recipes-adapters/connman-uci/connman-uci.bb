@@ -8,7 +8,7 @@ SRC_URI = " \
            file://network.config \
            file://wireless.config \
            "
-SRCREV = "5e76f4ed6a8649e499b658aeab51da18b0e5f14b"
+SRCREV = "c351f91ec608d614877041bb55fc39a258b06268"
 
 S = "${WORKDIR}/git"
 
