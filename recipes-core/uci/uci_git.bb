@@ -10,6 +10,7 @@ DEPENDS = "libubox"
 
 SRCREV = "c4df32b386c7bb29568140d135d7315e76c934b7"
 SRC_URI = "git://git.openwrt.org/project/uci.git \
+           file://0001-support-added-to-execute-external-command-on-configu.patch \
            file://uci.sh \
 "
 
