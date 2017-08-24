@@ -1,0 +1,33 @@
+From f8ca692356283b8c377882a51ab3a3d73ed3fed3 Mon Sep 17 00:00:00 2001
+From: Amarnath Valluri <amarnath.valluri@intel.com>
+Date: Wed, 23 Aug 2017 12:27:36 +0300
+Subject: [PATCH 3/4] Fix build failure in parallel build
+
+Due to missing dependency of liborange.la on orangerpcd build fails in parallel
+build.
+
+Also added missing likange to math library
+
+Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
+---
+ src/Makefile.am | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 8dad36c..51505df 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -11,7 +11,8 @@ AM_CFLAGS=$(CONFIG_CFLAGS) -D_POSIX_C_SOURCE=201609L -D_DEFAULT_SOURCE -D_XOPEN_
+ -Wno-unused-parameter -Wno-unused-variable -Wno-inline
+ liborange_la_SOURCES=base64.c json_check.c orange_luaobject.c orange_session.c orange_message.c orange_id.c orange_lua.c orange_ws_server.c orange_user.c orange_uci.c sha1.c orange.c orange_rpc.c util.c 
+ liborange_la_CFLAGS=$(AM_CFLAGS) $(CODE_COVERAGE_CFLAGS) -std=gnu99 -Wall -Werror
+-liborange_la_LIBADD=-lblobpack -lutype -lpthread -lwebsockets -lcrypt -lrt @LIBLUA_LINK@ @LIBUCI_LINK@
++liborange_la_LIBADD=-lblobpack -lutype -lpthread -lwebsockets -lcrypt -lrt -lm @LIBLUA_LINK@ @LIBUCI_LINK@
+ orangerpcd_SOURCES=main.c
+ orangerpcd_CFLAGS=$(AM_CFLAGS) -std=gnu99 -Wall -Werror
+-orangerpcd_LDADD=-lutype -lblobpack -lorange -lrt 
++orangerpcd_LDADD=-lutype -lblobpack -lrt $(top_builddir)/src/liborange.la
++orangerpcd_DEPENDENCIES = liborange.la
+-- 
+2.7.4
+

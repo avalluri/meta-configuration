@@ -1,0 +1,31 @@
+From baa72adf03ae0c5c5cc1d24c07d31c98315f7a05 Mon Sep 17 00:00:00 2001
+From: Amarnath Valluri <amarnath.valluri@intel.com>
+Date: Tue, 22 Aug 2017 11:15:39 +0300
+Subject: [PATCH 1/4] Use _DEFAULT_SOUCE inplace of _BSD_SOURCE
+
+Fix below compile error:
+
+error: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, user
+_DEFAULT_SOURCE" [-Werror=cpp]
+
+Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
+---
+ src/Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Makefile.am b/src/Makefile.am
+index d50d9c4..8dad36c 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -3,7 +3,7 @@ includedir=$(prefix)/include/orangerpcd/
+ lib_LTLIBRARIES=liborange.la
+ bin_PROGRAMS=orangerpcd
+ include_HEADERS=orange.h orange_id.h orange_lua.h orange_luaobject.h orange_message.h orange_server.h orange_uci.h orange_user.h orange_ws_server.h sha1.h 
+-AM_CFLAGS=$(CONFIG_CFLAGS) -D_POSIX_C_SOURCE=201609L -D_BSD_SOURCE -D_XOPEN_SOURCE -D_XOPEN_SOUCE_EXTENDED -D_GNU_SOURCE -Wall -Werror -Wno-format-y2k -W -Wstrict-prototypes -Wmissing-prototypes \
++AM_CFLAGS=$(CONFIG_CFLAGS) -D_POSIX_C_SOURCE=201609L -D_DEFAULT_SOURCE -D_XOPEN_SOURCE -D_XOPEN_SOUCE_EXTENDED -D_GNU_SOURCE -Wall -Werror -Wno-format-y2k -W -Wstrict-prototypes -Wmissing-prototypes \
+ -Wpointer-arith -Wreturn-type -Wwrite-strings -Wswitch \
+ -Wno-cast-align -Wchar-subscripts -Winline -Wtype-limits \
+ -Wnested-externs -Wredundant-decls -Wmissing-field-initializers -Wextra \
+-- 
+2.7.4
+

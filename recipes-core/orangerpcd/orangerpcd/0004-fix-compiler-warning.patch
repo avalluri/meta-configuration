@@ -1,0 +1,34 @@
+From 6aa7c211c4ce80a2a3f560fe8ea287966914b6f4 Mon Sep 17 00:00:00 2001
+From: Amarnath Valluri <amarnath.valluri@intel.com>
+Date: Tue, 22 Aug 2017 17:26:52 +0300
+Subject: [PATCH 4/4] fix compiler warning
+
+| ../../git/src/orange_session.c: In function 'orange_session_grant':
+| ../../git/src/orange_session.c:161:5: error: this 'if' clause does not
+guard... [-Werror=misleading-indentation]
+|      if (!object || !function)
+|      ^~
+
+Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
+---
+ src/orange_session.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/orange_session.c b/src/orange_session.c
+index 6c676d0..5f4c612 100644
+--- a/src/orange_session.c
++++ b/src/orange_session.c
+@@ -158,8 +158,9 @@ int orange_session_grant(struct orange_session *self, const char *scope, const c
+     char *new_scope, *new_obj, *new_func, *new_id, *new_perms;
+     int id_len;
+ 
+-    if (!object || !function)
++    if (!object || !function) {
+         return -EINVAL;
++    }
+ 
+ 	pthread_mutex_lock(&self->lock); 
+ 
+-- 
+2.7.4
+
