@@ -1,0 +1,45 @@
+From cb83c1951d954b16cb1cde31d86ced00dfeec462 Mon Sep 17 00:00:00 2001
+From: Amarnath Valluri <amarnath.valluri@intel.com>
+Date: Mon, 4 Sep 2017 11:54:13 +0300
+Subject: [PATCH 1/2] yui -> minify compress
+
+Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
+---
+ scripts/bootstrap.sh | 4 ++--
+ scripts/juci-compile | 6 +-----
+ 2 files changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/scripts/bootstrap.sh b/scripts/bootstrap.sh
+index 1bb0c9c..8c2032f 100755
+--- a/scripts/bootstrap.sh
++++ b/scripts/bootstrap.sh
+@@ -9,8 +9,8 @@ if [ "$(which npm)" == "" ]; then
+ 	ERR=1
+ fi 
+ 
+-if [ "$(which yui-compressor)" == "" ] && [ "$(which yuicompressor)" == "" ]; then
+-	perr "!!! yui-compressor is missing. Please install package yui-compressor or yuicompressor."; 
++if [ "$(which minify)" == "" ]; then
++	perr "!!! minify is missing. Please install package minify."; 
+ 	ERR=1
+ fi 
+ 
+diff --git a/scripts/juci-compile b/scripts/juci-compile
+index 388447d..1579549 100755
+--- a/scripts/juci-compile
++++ b/scripts/juci-compile
+@@ -14,10 +14,6 @@ done
+ 
+ for file in `find $BIN/www/css/ -name "*.css"`; do 
+ 	echo "Compiling CSS ${file}.."
+-	if [ "$(which yui-compressor)" != "" ]; then
+-		yui-compressor ${file} > ${file}.out
+-	else
+-		yuicompressor ${file} > ${file}.out
+-	fi
++	minify ${file} > ${file}.out
+ 	mv ${file}.out ${file}
+ done
+-- 
+2.7.4
+

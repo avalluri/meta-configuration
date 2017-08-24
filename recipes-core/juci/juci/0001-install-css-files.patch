@@ -1,0 +1,25 @@
+From 1cbdf2d2c7e7b39cf921710a5bc21a8b156cb48c Mon Sep 17 00:00:00 2001
+From: Amarnath Valluri <amarnath.valluri@intel.com>
+Date: Mon, 4 Sep 2017 16:19:53 +0300
+Subject: [PATCH] install css files
+
+Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
+---
+ Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Makefile b/Makefile
+index dbb7ebb..1b5c654 100644
+--- a/Makefile
++++ b/Makefile
+@@ -91,6 +91,7 @@ $(1)-install: $(2)/po/template.pot $(CODE_DIR)/$(CODE_LOAD)-$(1).js
+ 	-$(Q)if [ -d $(2)/rpc ]; then $(CP) $(2)/rpc/* $(BACKEND_BIN_DIR); fi
+ 	$(Q)if [ -d $(2)/service ]; then $(CP) $(2)/service/* $(BIN)/usr/lib/orange/services/; fi
+ 	$(Q)if [ -f $(2)/access.acl ]; then $(CP) $(2)/access.acl $(BIN)/usr/lib/orange/acl/$(1).acl; fi
++	$(Q)if [ -d $(2)/src/css ]; then $(CP) $(2)/src/css/* $(CSS_DIR); fi
+ endef
+ 
+ ifneq ($(MODULE),)
+-- 
+2.7.4
+

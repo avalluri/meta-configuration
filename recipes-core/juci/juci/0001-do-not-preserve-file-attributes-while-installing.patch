@@ -1,0 +1,44 @@
+From 4b377c0ab0a6c9e0b81cf2aaf0250f1d57e56129 Mon Sep 17 00:00:00 2001
+From: Amarnath Valluri <amarnath.valluri@intel.com>
+Date: Mon, 4 Sep 2017 15:50:26 +0300
+Subject: [PATCH] do not preserve file attributes while installing
+
+Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
+---
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f9b1684..dbb7ebb 100644
+--- a/Makefile
++++ b/Makefile
+@@ -19,7 +19,7 @@ CSS_DIR:=$(BIN)/www/css
+ TMP_DIR:=tmp
+ TARGETS:=
+ PHONY:=debug release clean prepare node_modules 
+-CP:=cp -Rp 
++CP:=cp -R
+ Q:=@
+ INSTALL_DIR:=mkdir -p
+ 
+@@ -203,7 +203,7 @@ install:
+ 	$(INSTALL_DIR) $(BIN)/usr/bin/
+ 	@cp juci.config.example $(BIN)/usr/share/juci/
+ 	@cp juci-update $(BIN)/usr/bin/
+-	@cp -Rp $(BIN)/* $(DESTDIR)
++	@cp -R $(BIN)/* $(DESTDIR)
+ 
+ .PHONY: $(PHONY) $(UBUS_MODS) 
+ 
+@@ -212,7 +212,7 @@ $(UBUS_MODS):
+ 	@echo "CFLAGS: $(CFLAGS)"
+ 	@make -i -C $@ clean
+ 	@make -C $@ 
+-	@cp -Rp $@/build/* $(BIN)/
++	@cp -R $@/build/* $(BIN)/
+ 	
+ clean: 
+ 	rm -rf ./bin ./tmp
+-- 
+2.7.4
+
