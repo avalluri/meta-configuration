@@ -20,5 +20,3 @@ inherit autotools
 
 #FILES_SOLIBSDEV = ""
 #FILES_${PN} = "${libdir}/*.so"
-
-RDEPENDS_${PN} += "libusys"
