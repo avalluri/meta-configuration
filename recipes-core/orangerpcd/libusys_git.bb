@@ -8,22 +8,14 @@ LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://src/uloop.c;beginline=1;endline=17;md5=9bed33188dd18fa8fec97a710e234273"
 SECTION = "libs"
 
-DEPENDS += "libutype"
-RDEPENDS_${PN} += "libutype"
-
-SRCREV = "27c5f81c80a3ea113378f56d4fc0e8fd903e7abe"
+SRCREV = "2b94b1dd585fcb43105156c9e0c96e9850e9e0ad"
 SRC_URI = "git://github.com/mkschreder/libusys"
 
 S = "${WORKDIR}/git"
 
 EXTRA_OEMAKE = "DESTDIR=${D} BUILD_DIR=${B}"
 
-TARGET_CC_ARCH += "${LDFLAGS}"
+DEPENDS = "libutype"
 
-do_install() {
-	oe_runmake install
-}
-
-FILES_SOLIBSDEV = ""
-FILES_${PN} = "${libdir}/*.so"
+inherit autotools
 
