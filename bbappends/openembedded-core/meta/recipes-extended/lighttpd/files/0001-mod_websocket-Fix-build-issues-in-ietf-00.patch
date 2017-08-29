@@ -1,0 +1,70 @@
+From 4c5d849d8120a91b26da96d3cb7554e2830b3f38 Mon Sep 17 00:00:00 2001
+From: Amarnath Valluri <amarnath.valluri@intel.com>
+Date: Fri, 1 Sep 2017 11:39:20 +0300
+Subject: [PATCH] mod_websocket: Fix build issues in ietf-00
+
+Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
+---
+ src/mod_websocket.h           | 12 ++++++------
+ src/mod_websocket_handshake.c |  3 ++-
+ 2 files changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/src/mod_websocket.h b/src/mod_websocket.h
+index d6b69bb..293a71d 100644
+--- a/src/mod_websocket.h
++++ b/src/mod_websocket.h
+@@ -84,9 +84,9 @@ typedef struct {
+     unsigned int timeout;
+     unsigned int debug;
+ 
+-#ifdef	_MOD_WEBSOCKET_SPEC_RFC_6455_
++//#ifdef	_MOD_WEBSOCKET_SPEC_RFC_6455_
+     unsigned int ping_interval;
+-#endif	/* _MOD_WEBSOCKET_SPEC_RFC_6455_ */
++//#endif	/* _MOD_WEBSOCKET_SPEC_RFC_6455_ */
+ 
+ } plugin_config;
+ 
+@@ -140,10 +140,10 @@ typedef enum {
+     MOD_WEBSOCKET_FRAME_TYPE_BIN,
+     MOD_WEBSOCKET_FRAME_TYPE_CLOSE,
+ 
+-#ifdef  _MOD_WEBSOCKET_SPEC_RFC_6455_
++//#ifdef  _MOD_WEBSOCKET_SPEC_RFC_6455_
+     MOD_WEBSOCKET_FRAME_TYPE_PING,
+     MOD_WEBSOCKET_FRAME_TYPE_PONG,
+-#endif  /* _MOD_WEBSOCKET_SPEC_RFC_6455_ */
++//#endif  /* _MOD_WEBSOCKET_SPEC_RFC_6455_ */
+ 
+ } mod_websocket_frame_type_t;
+ 
+@@ -172,10 +172,10 @@ typedef struct {
+     mod_websocket_handshake_t handshake;
+     mod_websocket_frame_t frame;
+ 
+-#ifdef	_MOD_WEBSOCKET_SPEC_RFC_6455_
++//#ifdef	_MOD_WEBSOCKET_SPEC_RFC_6455_
+     time_t ping_ts;
++//#endif	/* _MOD_WEBSOCKET_SPEC_RFC_6455_ */
+     unsigned int timeout_cnt;
+-#endif	/* _MOD_WEBSOCKET_SPEC_RFC_6455_ */
+ 
+     /* fd and fd_idx to backend */
+     int fd, fd_idx;
+diff --git a/src/mod_websocket_handshake.c b/src/mod_websocket_handshake.c
+index 518ecfe..39e3f39 100644
+--- a/src/mod_websocket_handshake.c
++++ b/src/mod_websocket_handshake.c
+@@ -544,7 +544,8 @@ mod_websocket_errno_t mod_websocket_handshake_forward_request(handler_ctx *hctx)
+     buffer_append_string(new_request, "\r\n");
+ 
+ #ifdef	_MOD_WEBSOCKET_SPEC_IETF_00_
+-    buffer_append_string_len(new_request, hctx->handshake.key3->ptr, SEC_WEBSOCKET_KEY3_STRLEN);
++    if (!buffer_is_empty(hctx->handshake.key3))
++        buffer_append_string_len(new_request, hctx->handshake.key3->ptr, SEC_WEBSOCKET_KEY3_STRLEN);
+ #endif	/* _MOD_WEBSOCKET_SPEC_IETF_00_ */
+ 
+     chunkqueue_append_buffer(hctx->tosrv, new_request);
+-- 
+2.7.4
+

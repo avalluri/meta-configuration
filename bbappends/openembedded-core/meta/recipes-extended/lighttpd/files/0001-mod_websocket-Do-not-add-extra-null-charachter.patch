@@ -1,0 +1,46 @@
+From e3c5522c592356c5ba8b8caad74cf05a556cde8c Mon Sep 17 00:00:00 2001
+From: Amarnath Valluri <amarnath.valluri@intel.com>
+Date: Fri, 1 Sep 2017 13:22:40 +0300
+Subject: [PATCH] mod_websocket: Do not add extra null charachter
+
+In pure 'proxy' mode should not append '\0' to data received from backend.
+
+Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
+---
+ src/mod_websocket_frame.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/src/mod_websocket_frame.c b/src/mod_websocket_frame.c
+index fd93484..b6448b2 100644
+--- a/src/mod_websocket_frame.c
++++ b/src/mod_websocket_frame.c
+@@ -493,7 +493,6 @@ static int recv_rfc_6455(handler_ctx *hctx) {
+ #endif	/* _MOD_WEBSOCKET_SPEC_RFC_6455_ */
+ 
+ static int send_forward(handler_ctx *hctx, char *payload, size_t siz) {
+-    const char endl = '\0';
+     buffer *b = NULL;
+ 
+     if (payload == NULL || siz == 0) {
+@@ -506,7 +505,6 @@ static int send_forward(handler_ctx *hctx, char *payload, size_t siz) {
+     }
+     buffer_append_string_len(b, payload, siz);
+     /* needs '\0' char to send */
+-    buffer_append_string_len(b, &endl, 1);
+     chunkqueue_append_buffer(hctx->tocli, b);
+     buffer_free(b);
+     return 0;
+@@ -529,8 +527,9 @@ static int recv_forward(handler_ctx *hctx) {
+             DEBUG_LOG(MOD_WEBSOCKET_LOG_ERR, "s", "no memory");
+             return -1;
+         }
+-        buffer_append_string_len(b, frame->ptr, frame->used);
++        buffer_append_string_len(b, frame->ptr, frame->used-1);
+         chunkqueue_append_buffer(hctx->tosrv, b);
++        DEBUG_LOG(MOD_WEBSOCKET_LOG_DEBUG, "bdsd", b, b->used, ", frame len; ", frame->used);
+         buffer_free(b);
+     }
+     chunkqueue_reset(hctx->fromcli);
+-- 
+2.7.4
+
