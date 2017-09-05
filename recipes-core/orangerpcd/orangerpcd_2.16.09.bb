@@ -2,7 +2,7 @@
 # Released under the MIT license (see COPYING.MIT for the terms)
 
 DESCRIPTION = "Revolution RPC Server (RevoRPCD)"
-HOMEPAGE = "https://github.com/mkschreder/jucid"
+HOMEPAGE = "https://github.com/mkschreder/orangerpcd"
 LICENSE = "GPL-3.0"
 LIC_FILES_CHKSUM = "file://COPYING;md5=ecb319022da02987a5c1a92120412393"
 SECTION = "apps"
@@ -31,7 +31,10 @@ PACKAGECONFIG[parallel] = "--enable-parallel, --disable-parallel"
 
 do_install_append() {
     install -d ${D}${datadir}/lua/5.1/orange
-    install -Dm 0755  ${S}/lualib/orange/*.lua ${D}${datadir}/lua/5.1/orange/
+    install -Dm 0755 ${S}/lualib/orange/*.lua ${D}${datadir}/lua/5.1/orange/
+
+    install -d ${D}${libdir}/orange/api
+    install -Dm 0755 ${S}/plugins/*.lua ${D}${libdir}/orange/api/
 
     install -d ${D}${sysconfdir}/orange
     install -m0600 ${WORKDIR}/orange.shadow ${D}${sysconfdir}/orange/shadow
@@ -40,4 +43,4 @@ do_install_append() {
     install -m0644 ${WORKDIR}/orange.config ${D}${sysconfdir}/config/orange
 }
 
-FILES_${PN} += "${datadir}/lua/5.1 ${sysconfdir}"
+FILES_${PN} += "${datadir}/lua/5.1 ${sysconfdir} ${libdir}/orange/"
