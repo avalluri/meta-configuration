@@ -4,16 +4,17 @@
 DESCRIPTION = "lightweight C websockets library"
 HOMEPAGE = "https://github.com/mkschreder/libblobpack"
 LICENSE = "LGPL-2.1"
-LIC_FILES_CHKSUM = "file://LICENSE;md5=f197d69f6bda1c450e2173a161286269"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=b44d8de2acfd19cc7f43d7ed14bef2d8"
 SECTION = "libs"
 
 DEPENDS += "zlib openssl"
 
-SRCREV = "d459a6fadc7127f85c3bf46bf2b982199e68d023"
-SRC_URI = "git://github.com/warmcat/libwebsockets"
+SRC_URI = "https://github.com/warmcat/libwebsockets/archive/v${PV}.tar.gz"
+SRC_URI[md5sum] = "af045e5fe44b49e701e60e9b78d48b32"
 
-S = "${WORKDIR}/git"
+S = "${WORKDIR}/${BPN}-${PV}"
 inherit cmake
+
 PACKAGES += "${PN}-test"
 FILES_${PN}-dev += "${libdir}/cmake"
 FILES_${PN}-test += "${datadir}/"
