@@ -14,6 +14,7 @@ SRC_URI = "git://github.com/mkschreder/juci \
            file://0001-package-json-update.patch \
            file://0001-uglifyjs-preserve-lines-for-better-debugging.patch \
            file://Makefile.local \
+           file://juci.config \
           "
 SRCREV = "b78a6632560e4651db1adf5f67d5321538cdd78b"
 
@@ -44,6 +45,12 @@ do_compile() {
     ln -sf ${S}/node_modules/minify/bin/minify.js ${WORKDIR}/recipe-sysroot-native/usr/bin/minify
 }
 
+update_juci_config() {
+    install -m0644 ${WORKDIR}/juci.config ${D}${sysconfdir}/config/juci
+}
+
+do_install[postfuncs] += " update_juci_config"
+
 # PARALLEL_MAKE is required because the Makefile from Juci seems to be broken as "make -j8" would cause it to fail. Hence, forcing it to only build with -j1
 PARALLEL_MAKE = "-j1"
 
@@ -54,4 +61,4 @@ do_install_append() {
 
 FILES_${PN} += "/www ${datadir}/lua"
 FILES_${PN} += "${libdir}/* ${base_sbindir} ${bindir}"
-FILES_${PN} += "${datadir}/*"
+FILES_${PN} += "${datadir}/* ${sysconfdir}/config/juci"
