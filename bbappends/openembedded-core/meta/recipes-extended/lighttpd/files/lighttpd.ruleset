@@ -1,0 +1,12 @@
+#!/usr/sbin/nft
+
+table inet filter {
+    include "zones.ruleset"
+    chain lighttpd {
+        iif @ZONE_LAN accept;
+        iif @ZONE_WAN accept;
+    }
+}
+
+add element inet filter tcp_service_map { http: jump lighttpd }
+add element inet filter tcp_service_map { https: jump lighttpd }
