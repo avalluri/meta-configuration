@@ -1,0 +1,27 @@
+From 393e30f205082a18b32da6ca4682cb63c54d8faf Mon Sep 17 00:00:00 2001
+From: Amarnath Valluri <amarnath.valluri@intel.com>
+Date: Wed, 6 Sep 2017 15:33:59 +0300
+Subject: [PATCH] tmp: disable login check
+
+Signed-off-by: Amarnath Valluri <amarnath.valluri@intel.com>
+---
+ src/orange.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/orange.c b/src/orange.c
+index f78b050..aa8dfe3 100644
+--- a/src/orange.c
++++ b/src/orange.c
+@@ -241,7 +241,8 @@ static bool _try_auth(const char *sha1hash, const char *challenge, const char *r
+ 	char hash[SHA1_BLOCK_SIZE*2+1] = {0}; 
+ 	for(int c = 0; c < SHA1_BLOCK_SIZE; c++) sprintf(hash + (c * 2), "%02x", binhash[c]); 
+ 
+-	DEBUG("authenticating against digest %s\n", hash); 
++	DEBUG("authenticating against digest %s\n", hash);
++    return true;
+ 	return !strncmp((const char*)hash, response, SHA1_BLOCK_SIZE*2); 
+ }
+ 
+-- 
+2.7.4
+

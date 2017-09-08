@@ -20,7 +20,7 @@ S = "${WORKDIR}/git"
 
 inherit autotools pkgconfig
 
-DEPENDS += "libblobpack libutype libusys uci libwebsockets rpcd ubus lua5.1 luajit"
+DEPENDS += "libblobpack libutype libusys uci libwebsockets rpcd ubus lua5.1 luajit coreutils-native"
 RDEPENDS_${PN} += "luaposix"
 
 OECMAKE_C_FLAGS += "-I${STAGING_INCDIR}/lua5.1 -DLUA_COMPAT_5_1"
@@ -28,6 +28,15 @@ CFLAGS_append = " -Wno-unused-result -Wno-implicit-fallthrough -Wno-format-trunc
 EXTRA_OECMAKE += "-DLUAPATH=${libdir}/lua/5.1"
 PACKAGECONFIG ??= ""
 PACKAGECONFIG[parallel] = "--enable-parallel, --disable-parallel"
+
+RPCD_USER ??= "admin"
+RPCD_PASSWD ??= "${RPCD_USER}"
+update_rpcd_user() {
+    export passwd=$(echo -n ${RPCD_PASSWD} | sha1sum | cut -f1 -d' ')
+    sed -i -e 's/{USERNAME}/${RPCD_USER}/1' -e "s/{PASSWD}/${passwd}/" ${WORKDIR}/orange.shadow
+    sed -i -e 's/{USERNAME}/${RPCD_USER}/1' ${WORKDIR}/orange.config
+}
+do_configure[postfuncs] += " update_rpcd_user"
 
 do_install_append() {
     install -d ${D}${datadir}/lua/5.1/orange
