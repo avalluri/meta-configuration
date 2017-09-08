@@ -15,6 +15,7 @@ SRC_URI = "git://github.com/mkschreder/juci \
            file://0001-uglifyjs-preserve-lines-for-better-debugging.patch \
            file://Makefile.local \
            file://juci.config \
+           file://firewall.config \
           "
 SRCREV = "b78a6632560e4651db1adf5f67d5321538cdd78b"
 
@@ -57,8 +58,11 @@ PARALLEL_MAKE = "-j1"
 do_install_append() {
 	oe_runmake
 	oe_runmake DESTDIR='${D}' install
+    #FIXME: Just to satisify Juci network module, provide a temporary firewall
+    #configuation. 
+    install -m0644 ${WORKDIR}/firewall.config ${D}${sysconfdir}/config/firewall
 }
 
 FILES_${PN} += "/www ${datadir}/lua"
 FILES_${PN} += "${libdir}/* ${base_sbindir} ${bindir}"
-FILES_${PN} += "${datadir}/* ${sysconfdir}/config/juci"
+FILES_${PN} += "${datadir}/* ${sysconfdir}/config/"
