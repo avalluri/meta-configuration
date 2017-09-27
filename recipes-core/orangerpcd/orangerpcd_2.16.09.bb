@@ -21,7 +21,7 @@ S = "${WORKDIR}/git"
 inherit autotools pkgconfig
 
 DEPENDS += "libblobpack libutype libusys uci libwebsockets rpcd ubus lua5.1 luajit coreutils-native"
-RDEPENDS_${PN} += "luaposix"
+RDEPENDS_${PN} += "luaposix lua5.1"
 
 OECMAKE_C_FLAGS += "-I${STAGING_INCDIR}/lua5.1 -DLUA_COMPAT_5_1"
 CFLAGS_append = " -Wno-unused-result -Wno-implicit-fallthrough -Wno-format-truncation"
