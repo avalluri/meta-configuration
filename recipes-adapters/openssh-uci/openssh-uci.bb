@@ -8,6 +8,8 @@ SRC_URI = " \
            file://functions.sh \
            file://uci2ssh.sh \
            "
+RDEPENDS_openssh-uci += "bash"
+
 do_install() {
     mkdir -p ${D}${sysconfdir}/config
     install -Dm 0644 ${WORKDIR}/sshd.config ${D}${sysconfdir}/config/sshd
